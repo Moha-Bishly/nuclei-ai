@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getMe } from "../api";
 import { useAuth } from "../contexts/AuthContext";
@@ -9,8 +9,12 @@ export default function OAuthCallbackPage() {
   const { login: authLogin } = useAuth();
   const navigate = useNavigate();
   const [params] = useSearchParams();
+  const hasRun = useRef(false);
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     const code = params.get("code");
     if (!code) {
       navigate("/login?error=oauth_failed");
