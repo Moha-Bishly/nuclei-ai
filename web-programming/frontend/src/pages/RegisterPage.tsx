@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { login as loginApi, register } from "../api";
-import { useAuth } from "../contexts/AuthContext";
+import { register } from "../api";
 
 export default function RegisterPage() {
-  const { login: authLogin } = useAuth();
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -18,11 +16,7 @@ export default function RegisterPage() {
     setError(null);
     try {
       await register(username, email, password);
-      const res = await loginApi(email, password);
-      if ("access_token" in res) {
-        authLogin(res.access_token, res.user);
-        navigate("/dashboard");
-      }
+      navigate("/login");
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err));
     } finally {
