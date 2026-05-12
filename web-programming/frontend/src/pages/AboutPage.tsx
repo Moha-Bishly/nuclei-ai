@@ -62,18 +62,6 @@ export default function AboutPage() {
           ))}
         </div>
       </div>
-
-      {/* Team */}
-      <div className="card">
-        <h3 style={{ marginBottom: 12 }}>Our Team</h3>
-        <p style={{ lineHeight: 1.7, color: "var(--text-muted)" }}>
-          NucleiAI was built by a multidisciplinary team of four students at
-          <strong style={{ color: "var(--text)" }}> Istinye University</strong> as part of a Software Engineering
-          capstone project. The team combines expertise in machine learning, full-stack web development,
-          UI/UX design, and project management to deliver a production-ready platform that bridges
-          the gap between AI research and practical biomedical application.
-        </p>
-      </div>
     </div>
   );
 }
