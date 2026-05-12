@@ -148,14 +148,16 @@ app.add_middleware(SecurityHeadersMiddleware)
 app.add_middleware(SessionMiddleware, secret_key=SECRET_KEY)
 
 
-# CORS: only allow localhost origins in development
-_cors_origins = [FRONTEND_URL]
+# CORS: allow frontend URL and all Cloudflare Pages preview subdomains
+_cors_origins = [FRONTEND_URL, "https://nuclei-ai-frontend.pages.dev"]
+_cors_origin_regex = r"https://[a-z0-9]+\.nuclei-ai-frontend\.pages\.dev"
 if ENV != "production":
     _cors_origins += ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=_cors_origins,
+    allow_origin_regex=_cors_origin_regex,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "DELETE"],
     allow_headers=["Content-Type", "Authorization"],
