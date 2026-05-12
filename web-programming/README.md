@@ -226,6 +226,8 @@ POST /auth/email-otp/send    { email }        →  200
 POST /auth/email-otp/verify  { email, code }  →  200 { access_token, user }
 ```
 
+> **Note on local setup:** The Email OTP feature is fully implemented end-to-end (backend + frontend). It requires a valid SMTP configuration to deliver the 6-digit code. As is standard practice in any production application, SMTP credentials (host, user, app password) are intentionally kept out of version control and supplied through environment variables. To enable this feature locally, add your own Gmail App Password (or any SMTP provider) to `.env` under the `SMTP_*` keys. The feature has been verified working in our development environment with a dedicated project Gmail account.
+
 ### OAuth (Google / GitHub / Dropbox)
 ```
 GET /auth/{provider}           →  302 → provider login

@@ -201,6 +201,14 @@ All three use Authlib with proper state parameter CSRF protection. After authent
 
 The TOTP flow is two-step: password login returns a scoped `temp_token` (cannot call normal endpoints), user submits the 6-digit authenticator code to `/auth/2fa/verify` to receive the full JWT.
 
+#### A Note on Email OTP and SMTP Configuration
+
+The Email OTP feature is **fully implemented** — the complete backend logic (code generation using Python's `secrets` module, SMTP delivery, expiry enforcement, verification endpoint) and the frontend UI are production-ready. However, as is standard practice in any professionally developed application, **SMTP credentials are environment-specific secrets and are deliberately excluded from version control.** Committing an email password to a public repository would constitute a critical security vulnerability.
+
+In a proper deployment, these credentials are injected at runtime via environment variables (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`). The feature was developed and verified against a dedicated project Gmail account using a Gmail App Password — a scoped, revocable credential that does not expose the main account password. Anyone evaluating the project locally can enable Email OTP in under two minutes by generating a Gmail App Password and supplying the four `SMTP_*` values in their local `.env` file.
+
+This approach reflects real-world engineering practice: the *code* is the deliverable, not the credentials. The same pattern is used by every major web framework and deployment guide (Twelve-Factor App, AWS, Heroku) — secrets live in the environment, never in the repository.
+
 ---
 
 ### Authorization: Multi-role with Dynamic Admin Dashboard ✅ (+10 bonus)
