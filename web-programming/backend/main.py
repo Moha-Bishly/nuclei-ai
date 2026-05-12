@@ -884,7 +884,7 @@ def admin_delete_user(
     # Admin can only delete viewers/researchers
     if current.role == UserRole.admin and target.role not in _MANAGEABLE:
         raise HTTPException(status_code=403, detail="Admin cannot delete another admin.")
-    # Clean up owned records before deleting the user
+    # Clean up all owned records before deleting the user
     for ann in session.exec(select(Annotation).where(Annotation.user_id == user_id)).all():
         session.delete(ann)
     for fav in session.exec(select(Favourite).where(Favourite.user_id == user_id)).all():
@@ -895,6 +895,16 @@ def admin_delete_user(
         session.delete(notif)
     for comment in session.exec(select(Comment).where(Comment.user_id == user_id)).all():
         session.delete(comment)
+    # Clean up publications (and their favourites/comments) owned by the user
+    for pub in session.exec(select(Publication).where(Publication.user_id == user_id)).all():
+        for fav in session.exec(select(Favourite).where(Favourite.publication_id == pub.id)).all():
+            session.delete(fav)
+        for cmt in session.exec(select(Comment).where(Comment.publication_id == pub.id)).all():
+            session.delete(cmt)
+        session.delete(pub)
+    # Clean up analysis jobs owned by the user
+    for job in session.exec(select(AnalysisJob).where(AnalysisJob.user_id == user_id)).all():
+        session.delete(job)
     session.delete(target)
     session.commit()
     _log.info("AUDIT user_deleted actor=%s target=%s (role=%s)", current.username, target.username, target.role.value)
