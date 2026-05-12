@@ -13,6 +13,8 @@ engine = create_engine(
     DATABASE_URL,
     connect_args=_connect_args,
     echo=_is_sqlite,
+    pool_pre_ping=True,
+    pool_recycle=300,
 )
 
 
