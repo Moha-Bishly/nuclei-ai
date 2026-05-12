@@ -19,15 +19,14 @@ test.describe("Auth flows", () => {
     await expect(page.getByText(/google|github|discord|register|create/i).first()).toBeVisible();
   });
 
-  test("register with valid credentials and auto-login", async ({ page }) => {
+  test("register with valid credentials redirects to login", async ({ page }) => {
     const ts = Date.now();
     await page.goto("/register");
     await page.getByLabel(/username/i).fill(`user${ts}`);
     await page.getByLabel(/email/i).fill(`user${ts}@test.com`);
     await page.getByLabel(/password/i).fill("Password123!");
     await page.getByRole("button", { name: /create account/i }).click();
-    // Should redirect to dashboard after register+auto-login
-    await expect(page).toHaveURL(/dashboard|analyze/, { timeout: 10_000 });
+    await expect(page).toHaveURL(/login/, { timeout: 10_000 });
   });
 
   test("login with wrong password shows error", async ({ page }) => {
