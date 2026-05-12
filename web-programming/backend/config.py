@@ -39,6 +39,7 @@ ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 
 TEMP_TOKEN_EXPIRE_MINUTES: int = 5
 
 FRONTEND_URL: str = os.getenv("FRONTEND_URL", "http://localhost:5173")
+BACKEND_URL: str = os.getenv("BACKEND_URL", "http://localhost:8000")
 
 # OAuth providers (empty string = provider disabled)
 GOOGLE_CLIENT_ID: str = os.getenv("GOOGLE_CLIENT_ID", "")

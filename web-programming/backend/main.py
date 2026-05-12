@@ -48,7 +48,7 @@ from backend.auth_utils import (
     verify_otp_hash,
     verify_password,
 )
-from backend.config import ENV, FRONTEND_URL, SECRET_KEY
+from backend.config import ENV, FRONTEND_URL, BACKEND_URL, SECRET_KEY
 from backend.security import SecurityHeadersMiddleware, is_valid_image_bytes
 from backend.crud import AnnotationService, JobService
 from backend.database import create_db_and_tables, engine, get_session
@@ -515,7 +515,7 @@ async def email_otp_verify(
 async def google_login(request: Request):
     if not hasattr(oauth, "google"):
         raise HTTPException(status_code=501, detail="Google OAuth not configured.")
-    redirect_uri = str(request.url_for("google_callback"))
+    redirect_uri = f"{BACKEND_URL}/auth/google/callback"
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 
@@ -534,7 +534,7 @@ async def google_callback(request: Request, session: Session = Depends(get_sessi
 async def github_login(request: Request):
     if not hasattr(oauth, "github"):
         raise HTTPException(status_code=501, detail="GitHub OAuth not configured.")
-    redirect_uri = str(request.url_for("github_callback"))
+    redirect_uri = f"{BACKEND_URL}/auth/github/callback"
     return await oauth.github.authorize_redirect(request, redirect_uri)
 
 
@@ -555,7 +555,7 @@ async def github_callback(request: Request, session: Session = Depends(get_sessi
 async def dropbox_login(request: Request):
     if not hasattr(oauth, "dropbox"):
         raise HTTPException(status_code=501, detail="Dropbox OAuth not configured.")
-    redirect_uri = str(request.url_for("dropbox_callback"))
+    redirect_uri = f"{BACKEND_URL}/auth/dropbox/callback"
     return await oauth.dropbox.authorize_redirect(request, redirect_uri)
 
 
